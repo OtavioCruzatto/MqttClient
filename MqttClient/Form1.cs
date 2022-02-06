@@ -34,7 +34,7 @@ namespace MqttClient
                 var options = new MqttClientOptionsBuilder()
                 .WithClientId(txtboxClientId.Text)
                 .WithTcpServer(txtboxTcpServer.Text, int.Parse(txtboxPort.Text))
-                .WithCredentials(txtboxCredential.Text, txtboxPassword.Text)
+                .WithCredentials(txtboxUsername.Text, txtboxPassword.Text)
                 .WithTls()
                 .WithCleanSession()
                 .Build();
@@ -134,5 +134,6 @@ namespace MqttClient
         {
             AtualizarGrid();
         }
+
     }
 }
