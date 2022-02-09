@@ -81,7 +81,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.btnClear = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtboxLog = new System.Windows.Forms.TextBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.groupBox1.SuspendLayout();
@@ -579,7 +579,7 @@
             // groupBox5
             // 
             this.groupBox5.Controls.Add(this.btnClear);
-            this.groupBox5.Controls.Add(this.textBox1);
+            this.groupBox5.Controls.Add(this.txtboxLog);
             this.groupBox5.Location = new System.Drawing.Point(6, 308);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(1302, 241);
@@ -596,13 +596,13 @@
             this.btnClear.Text = "Clear";
             this.btnClear.UseVisualStyleBackColor = true;
             // 
-            // textBox1
+            // txtboxLog
             // 
-            this.textBox1.Location = new System.Drawing.Point(6, 26);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(1092, 209);
-            this.textBox1.TabIndex = 0;
+            this.txtboxLog.Location = new System.Drawing.Point(6, 26);
+            this.txtboxLog.Multiline = true;
+            this.txtboxLog.Name = "txtboxLog";
+            this.txtboxLog.Size = new System.Drawing.Size(1092, 209);
+            this.txtboxLog.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -690,7 +690,7 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.Button btnClear;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtboxLog;
         private System.Windows.Forms.Label lblKeepAlive;
         private System.Windows.Forms.TextBox txtboxKeepAlive;
         private System.Windows.Forms.CheckBox checkboxCleanSession;

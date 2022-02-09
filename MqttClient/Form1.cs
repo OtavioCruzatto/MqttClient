@@ -16,47 +16,52 @@ namespace MqttClient
         private IMqttClient mqttClient;
         private List<Message> messages;
         private bool newMessage = false;
+        StringBuilder log;
 
         public Form1()
         {
             InitializeComponent();
 
+            timer1.Enabled = true;
+
             factory = new MqttFactory();
             mqttClient = factory.CreateMqttClient();
             messages = new List<Message>();
+            log = new StringBuilder();
         }
 
         private async void btnConnect_Click(object sender, EventArgs e)
         {
 
-            try
+            var options = new MqttClientOptionsBuilder()
+                    .WithClientId(txtboxClientId.Text)
+                    .WithTcpServer(txtboxTcpServer.Text, int.Parse(txtboxPort.Text))
+                    .WithCredentials(txtboxUsername.Text, txtboxPassword.Text)
+                    .WithTls()
+                    .WithCleanSession()
+                    .Build();
+
+            if (mqttClient.IsConnected)
             {
-                var options = new MqttClientOptionsBuilder()
-                .WithClientId(txtboxClientId.Text)
-                .WithTcpServer(txtboxTcpServer.Text, int.Parse(txtboxPort.Text))
-                .WithCredentials(txtboxUsername.Text, txtboxPassword.Text)
-                .WithTls()
-                .WithCleanSession()
-                .Build();
-
-                mqttClient.UseConnectedHandler(e =>
-                {
-                    Console.WriteLine($"Cliente {options.ClientId}: Conectado ao broker.");
-                });
-
-                mqttClient.UseDisconnectedHandler(e =>
-                {
-                    timer1.Enabled = false;
-                    Console.WriteLine($"Cliente {options.ClientId}: Desconectado do broker.");
-                });
-
-                await mqttClient.ConnectAsync(options, CancellationToken.None);
+                await mqttClient.DisconnectAsync();
+                SetDisconnection(options);
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show("Verifique o preenchimento dos campos.", "Falha na conexão.");
-                Console.WriteLine(ex.Message);
-                Console.WriteLine(ex.StackTrace);
+                try
+                {
+                    await mqttClient.ConnectAsync(options, CancellationToken.None);
+                    if (mqttClient.IsConnected)
+                    {
+                        SetConnection(options);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Please, verify the content of the fields.", "Connection failed.");
+                    Console.WriteLine(ex.Message);
+                    Console.WriteLine(ex.StackTrace);
+                }
             }
 
             mqttClient.UseApplicationMessageReceivedHandler(e =>
@@ -66,7 +71,7 @@ namespace MqttClient
                 var qos = ((int)e.ApplicationMessage.QualityOfServiceLevel).ToString();
                 messages.Add(new Message(topic, payload, qos));
                 newMessage = true;
-                Console.WriteLine($"Cliente {mqttClient.Options.ClientId}: Recebendo no topico: {topic}");
+                log.AppendLine($"{DateTime.Now} Client '{mqttClient.Options.ClientId}' receiving data from the topic '{topic}'.");
             });
         }
 
@@ -83,7 +88,7 @@ namespace MqttClient
                 try
                 {
                     await mqttClient.PublishAsync(message, CancellationToken.None);
-                    Console.WriteLine($"Cliente {mqttClient.Options.ClientId}: Publicando no topico: {message.Topic}");
+                    log.AppendLine($"{DateTime.Now} Client '{mqttClient.Options.ClientId}' publishing data to the topic '{message.Topic}'.");
                 }
                 catch (Exception ex)
                 {
@@ -106,8 +111,7 @@ namespace MqttClient
                 try
                 {
                     await mqttClient.SubscribeAsync(options);
-                    timer1.Enabled = true;
-                    Console.WriteLine($"Cliente {mqttClient.Options.ClientId}: Subscrevendo no topico: {options.Topic}");
+                    log.AppendLine($"{DateTime.Now} Client '{mqttClient.Options.ClientId}' subscribing in the topic '{options.Topic}'.");
                 }
                 catch (Exception ex)
                 {
@@ -117,7 +121,7 @@ namespace MqttClient
             }
         }
 
-        private void AtualizarGrid()
+        private void UpdateGrid()
         {
             if ((newMessage == true) && (messages.Count > 0))
             {
@@ -132,7 +136,23 @@ namespace MqttClient
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            AtualizarGrid();
+            UpdateGrid();
+            txtboxLog.Text = log.ToString();
+            
+        }
+
+        private void SetDisconnection(IMqttClientOptions options)
+        {
+            btnConnect.Text = "Connect";
+            pbConnectionStatus.Value = 0;
+            log.AppendLine($"{DateTime.Now} Client '{options.ClientId}' disconnected of the broker.");
+        }
+
+        private void SetConnection(IMqttClientOptions options)
+        {
+            btnConnect.Text = "Disconnect";
+            pbConnectionStatus.Value = 100;
+            log.AppendLine($"{DateTime.Now} Client '{options.ClientId}' connected to the broker.");
         }
 
     }
