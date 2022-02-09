@@ -155,5 +155,10 @@ namespace MqttClient
             log.AppendLine($"{DateTime.Now} Client '{options.ClientId}' connected to the broker.");
         }
 
+        private void txtboxLog_TextChanged(object sender, EventArgs e)
+        {
+            txtboxLog.SelectionStart = txtboxLog.Text.Length;
+            txtboxLog.ScrollToCaret();
+        }
     }
 }

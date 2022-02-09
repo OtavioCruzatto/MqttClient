@@ -601,8 +601,10 @@
             this.txtboxLog.Location = new System.Drawing.Point(6, 26);
             this.txtboxLog.Multiline = true;
             this.txtboxLog.Name = "txtboxLog";
+            this.txtboxLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtboxLog.Size = new System.Drawing.Size(1092, 209);
             this.txtboxLog.TabIndex = 0;
+            this.txtboxLog.TextChanged += new System.EventHandler(this.txtboxLog_TextChanged);
             // 
             // tabPage2
             // 
