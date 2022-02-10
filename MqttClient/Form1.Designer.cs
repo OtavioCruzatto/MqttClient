@@ -47,7 +47,7 @@
             this.txtboxLwtMessage = new System.Windows.Forms.TextBox();
             this.checkxoxLwtRetain = new System.Windows.Forms.CheckBox();
             this.lblLwtQoS = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboboxLwtQos = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtboxLwtTopic = new System.Windows.Forms.TextBox();
             this.checkboxCleanSession = new System.Windows.Forms.CheckBox();
@@ -195,7 +195,7 @@
             this.groupBox1.Controls.Add(this.txtboxLwtMessage);
             this.groupBox1.Controls.Add(this.checkxoxLwtRetain);
             this.groupBox1.Controls.Add(this.lblLwtQoS);
-            this.groupBox1.Controls.Add(this.comboBox1);
+            this.groupBox1.Controls.Add(this.comboboxLwtQos);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.txtboxLwtTopic);
             this.groupBox1.Controls.Add(this.checkboxCleanSession);
@@ -270,14 +270,14 @@
             this.lblLwtQoS.TabIndex = 16;
             this.lblLwtQoS.Text = "Last-Will QoS:";
             // 
-            // comboBox1
+            // comboboxLwtQos
             // 
-            this.comboBox1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(673, 185);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(241, 28);
-            this.comboBox1.TabIndex = 16;
+            this.comboboxLwtQos.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboboxLwtQos.FormattingEnabled = true;
+            this.comboboxLwtQos.Location = new System.Drawing.Point(673, 185);
+            this.comboboxLwtQos.Name = "comboboxLwtQos";
+            this.comboboxLwtQos.Size = new System.Drawing.Size(241, 28);
+            this.comboboxLwtQos.TabIndex = 16;
             // 
             // label1
             // 
@@ -441,6 +441,7 @@
             this.listviewSubSubscriptions.Size = new System.Drawing.Size(642, 356);
             this.listviewSubSubscriptions.TabIndex = 19;
             this.listviewSubSubscriptions.UseCompatibleStateImageBehavior = false;
+            this.listviewSubSubscriptions.View = System.Windows.Forms.View.Details;
             // 
             // lblSubQoS
             // 
@@ -699,7 +700,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtboxLwtTopic;
         private System.Windows.Forms.Label lblLwtQoS;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboboxLwtQos;
         private System.Windows.Forms.CheckBox checkxoxLwtRetain;
         private System.Windows.Forms.Label lblLwtMessage;
         private System.Windows.Forms.TextBox txtboxLwtMessage;
