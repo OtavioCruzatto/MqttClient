@@ -63,6 +63,7 @@
             this.lblPayload = new System.Windows.Forms.Label();
             this.lblPublishTopic = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.lblSubSubscriptions = new System.Windows.Forms.Label();
             this.listviewSubSubscriptions = new System.Windows.Forms.ListView();
             this.lblSubQoS = new System.Windows.Forms.Label();
@@ -272,6 +273,7 @@
             // 
             // comboboxLwtQos
             // 
+            this.comboboxLwtQos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboboxLwtQos.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboboxLwtQos.FormattingEnabled = true;
             this.comboboxLwtQos.Location = new System.Drawing.Point(673, 185);
@@ -359,6 +361,7 @@
             // 
             // comboboxPubQoS
             // 
+            this.comboboxPubQoS.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboboxPubQoS.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboboxPubQoS.FormattingEnabled = true;
             this.comboboxPubQoS.Location = new System.Drawing.Point(11, 181);
@@ -410,6 +413,7 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.label3);
             this.groupBox3.Controls.Add(this.lblSubSubscriptions);
             this.groupBox3.Controls.Add(this.listviewSubSubscriptions);
             this.groupBox3.Controls.Add(this.lblSubQoS);
@@ -424,6 +428,15 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Subscribe";
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(370, 158);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(278, 20);
+            this.label3.TabIndex = 20;
+            this.label3.Text = "Double click in an item to copy it\'s topic.";
+            // 
             // lblSubSubscriptions
             // 
             this.lblSubSubscriptions.AutoSize = true;
@@ -435,6 +448,7 @@
             // 
             // listviewSubSubscriptions
             // 
+            this.listviewSubSubscriptions.FullRowSelect = true;
             this.listviewSubSubscriptions.HideSelection = false;
             this.listviewSubSubscriptions.Location = new System.Drawing.Point(6, 181);
             this.listviewSubSubscriptions.Name = "listviewSubSubscriptions";
@@ -442,6 +456,7 @@
             this.listviewSubSubscriptions.TabIndex = 19;
             this.listviewSubSubscriptions.UseCompatibleStateImageBehavior = false;
             this.listviewSubSubscriptions.View = System.Windows.Forms.View.Details;
+            this.listviewSubSubscriptions.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.listviewSubSubscriptions_MouseDoubleClick);
             // 
             // lblSubQoS
             // 
@@ -454,6 +469,7 @@
             // 
             // comboboxSubQoS
             // 
+            this.comboboxSubQoS.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboboxSubQoS.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboboxSubQoS.FormattingEnabled = true;
             this.comboboxSubQoS.Location = new System.Drawing.Point(6, 108);
@@ -551,7 +567,7 @@
             // 
             // timer1
             // 
-            this.timer1.Interval = 500;
+            this.timer1.Interval = 50;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // tabControl1
@@ -596,6 +612,7 @@
             this.btnClear.TabIndex = 1;
             this.btnClear.Text = "Clear";
             this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // txtboxLog
             // 
@@ -713,5 +730,6 @@
         private System.Windows.Forms.Label lblPubQoS;
         private System.Windows.Forms.ComboBox comboboxPubQoS;
         private System.Windows.Forms.CheckBox checkboxPubRetain;
+        private System.Windows.Forms.Label label3;
     }
 }

@@ -12,7 +12,6 @@ namespace MqttClient
 {
     public partial class Form1 : Form
     {
-
         private MqttFactory factory;
         private IMqttClient mqttClient;
         private List<Message> messages = new List<Message>();
@@ -36,8 +35,9 @@ namespace MqttClient
 
         private async void btnConnect_Click(object sender, EventArgs e)
         {
-
-            var options = new MqttClientOptionsBuilder()
+            try
+            {
+                var options = new MqttClientOptionsBuilder()
                     .WithClientId(txtboxClientId.Text)
                     .WithTcpServer(txtboxTcpServer.Text, int.Parse(txtboxPort.Text))
                     .WithCredentials(txtboxUsername.Text, txtboxPassword.Text)
@@ -45,14 +45,12 @@ namespace MqttClient
                     .WithCleanSession()
                     .Build();
 
-            if (mqttClient.IsConnected)
-            {
-                await mqttClient.DisconnectAsync();
-                SetDisconnection(options);
-            }
-            else
-            {
-                try
+                if (mqttClient.IsConnected)
+                {
+                    await mqttClient.DisconnectAsync();
+                    SetDisconnection(options);
+                }
+                else
                 {
                     await mqttClient.ConnectAsync(options, CancellationToken.None);
                     if (mqttClient.IsConnected)
@@ -60,14 +58,14 @@ namespace MqttClient
                         SetConnection(options);
                     }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Please, verify the content of the fields.", "Connection failed.");
-                    Console.WriteLine(ex.Message);
-                    Console.WriteLine(ex.StackTrace);
-                }
             }
-
+            catch (Exception ex)
+            {
+                MessageBox.Show("Please, verify the content of the fields.", "Connection failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.StackTrace);
+            }
+            
             mqttClient.UseApplicationMessageReceivedHandler(e =>
             {
                 var topic = e.ApplicationMessage.Topic;
@@ -81,38 +79,49 @@ namespace MqttClient
 
         private async void btnPublish_Click(object sender, EventArgs e)
         {
-            var message = new MqttApplicationMessageBuilder()
-                .WithTopic(txtboxPublishTopic.Text)
-                .WithPayload(txtboxPayload.Text)
-                .WithAtMostOnceQoS()
-                .Build();
+            btnPublish.Enabled = false;
 
             if (mqttClient.IsConnected)
             {
                 try
                 {
+                    var message = new MqttApplicationMessageBuilder()
+                        .WithTopic(txtboxPublishTopic.Text)
+                        .WithPayload(txtboxPayload.Text)
+                        .WithAtMostOnceQoS()
+                        .Build();
+
                     await mqttClient.PublishAsync(message, CancellationToken.None);
                     log.AppendLine($"{DateTime.Now}: Client '{mqttClient.Options.ClientId}' publishing data to the topic '{message.Topic}'.");
                 }
                 catch (Exception ex)
                 {
+                    MessageBox.Show("Please, verify the content of the fields.", "Publish failed.");
                     Console.WriteLine(ex.Message);
                     Console.WriteLine(ex.StackTrace);
                 }
             }
+            else
+            {
+                MessageBox.Show("MQTT Client disconnected.", "Publish failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            btnPublish.Enabled = true;
         }
 
         private async void btnSubscribe_Click(object sender, EventArgs e)
         {
-            var options = new MqttTopicFilterBuilder()
-                .WithTopic(txtboxSubscribeTopic.Text)
-                .WithAtMostOnceQoS()
-                .Build();
+            btnSubscribe.Enabled = false;
 
             if (mqttClient.IsConnected)
             {
                 try
                 {
+                    var options = new MqttTopicFilterBuilder()
+                        .WithTopic(txtboxSubscribeTopic.Text)
+                        .WithAtMostOnceQoS()
+                        .Build();
+
                     await mqttClient.SubscribeAsync(options);
                     log.AppendLine($"{DateTime.Now}: Client '{mqttClient.Options.ClientId}' subscribing in the topic '{options.Topic}'.");
                     subscriptions.Add(options.Topic);
@@ -120,10 +129,17 @@ namespace MqttClient
                 }
                 catch (Exception ex)
                 {
+                    MessageBox.Show("Please, verify the content of the fields.", "Subscription failed.");
                     Console.WriteLine(ex.Message);
                     Console.WriteLine(ex.StackTrace);
                 }
             }
+            else
+            {
+                MessageBox.Show("MQTT Client disconnected.", "Subscription failed.", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            btnSubscribe.Enabled = true;
         }
 
         private void UpdateGrid()
@@ -141,7 +157,6 @@ namespace MqttClient
 
         private void UpdateSubscriptionListView()
         {
-            
             if ((newSubscription == true) && (subscriptions.Count > 0))
             {
                 int item = subscriptions.Count - 1;
@@ -203,5 +218,21 @@ namespace MqttClient
             PopulateQosComboBox(comboboxSubQoS);
             PopulateQosComboBox(comboboxLwtQos);
         }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            var result = MessageBox.Show("Are you sure?", "Clear console log", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+            if (result == DialogResult.Yes)
+            {
+                log.Clear();
+            }
+        }
+
+        private void listviewSubSubscriptions_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            var selectedTopic = listviewSubSubscriptions.FocusedItem.SubItems[1].Text;
+            Clipboard.SetText(selectedTopic);
+        }
+
     }
 }
